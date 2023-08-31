@@ -44,6 +44,7 @@ fun HomeScreen() {
             )
         }
     ) { innerPadding ->
+        val values = listOf(1,5,7,3,2)
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -59,16 +60,16 @@ fun HomeScreen() {
             ) {pageNo ->
                 when (pageNo) {
                     0 -> {
-                        CircularProgressBarAnimated(50, shouldRecompose)
+                        LineChart(values, shouldRecompose)
                     }
                     1 -> {
-                        CircularChart(listOf(1,2,3,4,5), shouldRecompose)
+                        CircularChart(values, shouldRecompose)
                     }
                     2 -> {
-                        BarGraph(listOf(1,2,3,4,5), shouldRecompose)
+                        BarGraph(values, shouldRecompose)
                     }
                     else -> {
-                        LineChart(listOf(1,2,3,4,5), shouldRecompose)
+                        CircularProgressBarAnimated(50, shouldRecompose)
                     }
                 }
             }
@@ -77,7 +78,7 @@ fun HomeScreen() {
                     shouldRecompose = !shouldRecompose
                 }
             ) {
-                Text("Animate")
+                Text(if(shouldRecompose) "Animate" else "Collapse")
             }
         }
     }

@@ -54,8 +54,8 @@ fun BarGraph(
         animationSpec = tween(1000, 0), label = "Graph Size Percentage"
     )
 
-    LaunchedEffect(key1 = true) {
-        animationPlayed = true
+    LaunchedEffect(key1 = shouldRecompose) {
+        animationPlayed = !shouldRecompose
     }
 
     Column(
@@ -74,18 +74,31 @@ fun BarGraph(
                 .aspectRatio(1.0F)
                 .fillMaxSize()
         ) {
-            val barWidth = this.size.width / xValues.size - 5
-            val gap = 5
-            drawLine(axisColor, Offset(8f, 0f), Offset(8F, this.size.height - 20f))
-            drawLine(axisColor, Offset(8F, this.size.height - 20f), Offset(this.size.width, this.size.height - 20f))
+            val canvasHeight = this.size.height
+            val canvasWidth = this.size.width
+            val gap = 100f
+            val barWidth = (canvasWidth - gap) / (xValues.size + 1)
+            val barMaxHeight = canvasHeight - gap
+            var stX = gap
+            drawLine(
+                axisColor,
+                Offset(gap, 0f),
+                Offset(gap, canvasHeight - 30f),
+                strokeWidth = 4f
+            )
+            drawLine(
+                axisColor,
+                Offset(gap, canvasHeight - 30f),
+                Offset(canvasWidth, canvasHeight - 30f),
+                strokeWidth = 4f
+            )
             for(index in xValues.indices) {
-                val canvasHeight = this.size.height
-                val barMaxHeight = canvasHeight - 20f
                 drawRect(
                     barColor,
-                    Offset(index * (barWidth + gap) + 8f, barMaxHeight * (1 - xValues[index] * curPercent.value / maxValue)),
+                    Offset(stX, barMaxHeight * (1 - xValues[index] * curPercent.value / maxValue)),
                     Size(barWidth, xValues[index] * barMaxHeight * curPercent.value / maxValue)
                 )
+                stX += barWidth + gap
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         index.toString(),
@@ -95,7 +108,6 @@ fun BarGraph(
                     )
                 }
                 drawContext.canvas.nativeCanvas.apply {
-                    Log.d("HERE", (maxValue - xValues[index]).toFloat().toString())
                     drawText(
                         xValues[index].toString(),
                         0F,

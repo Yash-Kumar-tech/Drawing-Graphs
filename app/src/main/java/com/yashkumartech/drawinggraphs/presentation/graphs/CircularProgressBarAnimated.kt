@@ -54,8 +54,8 @@ fun CircularProgressBarAnimated(
         animationSpec = tween(1000, 0), label = "Graph Size Percentage"
     )
 
-    LaunchedEffect(key1 = true) {
-        animationPlayed = true
+    LaunchedEffect(key1 = shouldRecompose) {
+        animationPlayed = !shouldRecompose
     }
 
     Column(
