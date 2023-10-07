@@ -24,8 +24,12 @@ import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 
 
 @Composable
@@ -33,10 +37,11 @@ fun BarGraph(
     xValues: List<Int> = emptyList(),
     shouldRecompose: Boolean,
 ) {
+    Log.d("HERE", xValues.toString())
     val axisColor = MaterialTheme.colorScheme.onBackground
     val barColor = MaterialTheme.colorScheme.primary
-    val maxValue = xValues.max()
     val density = LocalDensity.current
+    val maxValue = xValues.max()
     val textPaint = remember(density) {
         Paint().apply {
             color = android.graphics.Color.WHITE
@@ -76,20 +81,20 @@ fun BarGraph(
         ) {
             val canvasHeight = this.size.height
             val canvasWidth = this.size.width
-            val gap = 100f
+            val gap = 32f
             val barWidth = (canvasWidth - gap) / (xValues.size + 1)
-            val barMaxHeight = canvasHeight - gap
+            val barMaxHeight = canvasHeight - 30f
             var stX = gap
             drawLine(
                 axisColor,
                 Offset(gap, 0f),
-                Offset(gap, canvasHeight - 30f),
+                Offset(gap, canvasHeight - 32f),
                 strokeWidth = 4f
             )
             drawLine(
                 axisColor,
-                Offset(gap, canvasHeight - 30f),
-                Offset(canvasWidth, canvasHeight - 30f),
+                Offset(gap, canvasHeight - 32f),
+                Offset(canvasWidth, canvasHeight - 32f),
                 strokeWidth = 4f
             )
             for(index in xValues.indices) {
@@ -102,7 +107,7 @@ fun BarGraph(
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         index.toString(),
-                        (index) * (barWidth + gap) + barWidth / 2,
+                        (index) * (barWidth + gap) - barWidth / 2,
                         canvasHeight - 8f,
                         textPaint
                     )
@@ -110,7 +115,7 @@ fun BarGraph(
                 drawContext.canvas.nativeCanvas.apply {
                     drawText(
                         xValues[index].toString(),
-                        0F,
+                        15F,
                         (maxValue - xValues[index]) * (barMaxHeight * 1f / maxValue) + 16f,
                         textPaint
                     )
@@ -119,3 +124,4 @@ fun BarGraph(
         }
     }
 }
+

@@ -40,9 +40,7 @@ fun LineChart(
     xValues: List<Int> = emptyList(),
     shouldRecompose: Boolean
 ) {
-    val sortedValues = xValues.sorted()
     val maxValue = xValues.max()
-    val minValue = xValues.min()
     val graphColor = MaterialTheme.colorScheme.primary
     val pointColor = MaterialTheme.colorScheme.error
     val axisColor = MaterialTheme.colorScheme.onBackground
